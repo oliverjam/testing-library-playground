@@ -1,0 +1,15 @@
+{
+  "name": "testing-library-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "servor --reload"
+  },
+  "keywords": [],
+  "author": "@oliverjam",
+  "license": "ISC",
+  "devDependencies": {
+    "servor": "^3.3.1"
+  }
+}
