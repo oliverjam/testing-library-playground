@@ -327,7 +327,7 @@
         const selected = !!event.target.elements.selected.checked;
 
         try {
-          const result = t[query](preview, match, {
+          const result = t[query](preview.contentDocument.body, match, {
             exact,
             selector,
             hidden,
