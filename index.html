@@ -165,12 +165,11 @@
       }
 
       #preview {
+        align-self: stretch;
+        justify-self: stretch;
+        border: 0;
         padding: 1rem;
         background-color: #fff;
-      }
-
-      #preview * {
-        all: revert;
       }
 
       #preview .match {
@@ -260,7 +259,7 @@
       <section class="preview-section">
         <h2>Preview</h2>
         <div class="preview-screen">
-          <div id="preview"></div>
+          <iframe id="preview"></iframe>
           <pre id="log"></pre>
         </div>
       </section>
@@ -308,17 +307,17 @@
       querySelect.append(...options);
 
       const html = htmlTextarea.value;
-      preview.innerHTML = html;
+      preview.srcdoc = html;
 
       htmlTextarea.addEventListener("blur", () => {
         const html = htmlTextarea.value;
-        preview.innerHTML = html;
+        preview.srcdoc = html;
       });
 
       queryForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const html = event.target.elements.html.value;
-        preview.innerHTML = html;
+        preview.srcdoc = html;
 
         const query = event.target.elements.query.value;
         const match = event.target.elements.match.value;
