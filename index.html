@@ -172,11 +172,6 @@
         background-color: #fff;
       }
 
-      #preview .match {
-        outline: 0.125rem solid hsl(30 100% 50%);
-        outline-offset: 0.5rem;
-      }
-
       #log {
         margin: 0;
         padding: 1rem;
@@ -259,7 +254,7 @@
       <section class="preview-section">
         <h2>Preview</h2>
         <div class="preview-screen">
-          <iframe id="preview"></iframe>
+          <div id="preview"></div>
           <pre id="log"></pre>
         </div>
       </section>
@@ -277,6 +272,7 @@
       const htmlTextarea = document.querySelector("#html");
       const querySelect = document.querySelector("#query");
       const preview = document.querySelector("#preview");
+      const previewShadow = preview.attachShadow({ mode: "open" });
       const log = document.querySelector("#log");
 
       const queries = [
@@ -306,18 +302,18 @@
 
       querySelect.append(...options);
 
-      const html = htmlTextarea.value;
-      preview.srcdoc = html;
-
-      htmlTextarea.addEventListener("blur", () => {
+      function renderPreview() {
         const html = htmlTextarea.value;
-        preview.srcdoc = html;
-      });
+        previewShadow.innerHTML = `<div>${html}</div>`;
+      }
+
+      renderPreview();
+
+      htmlTextarea.addEventListener("blur", renderPreview);
 
       queryForm.addEventListener("submit", (event) => {
         event.preventDefault();
-        const html = event.target.elements.html.value;
-        preview.srcdoc = html;
+        renderPreview();
 
         const query = event.target.elements.query.value;
         const match = event.target.elements.match.value;
@@ -327,7 +323,7 @@
         const selected = !!event.target.elements.selected.checked;
 
         try {
-          const result = t[query](preview.contentDocument.body, match, {
+          const result = t[query](previewShadow.firstElementChild, match, {
             exact,
             selector,
             hidden,
@@ -340,9 +336,11 @@
             result.forEach((el) => el.classList.add("match"));
           } else {
             log.textContent = `Found element\n${t.prettyDOM(result)}`;
-            result.classList.add("match");
+            result.style.outline = "0.125rem solid hsl(30 100% 50%)";
+            result.style.outlineOffset = "0.25rem";
           }
         } catch (error) {
+          console.error(error);
           log.textContent = error;
         }
       });
